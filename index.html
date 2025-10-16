@@ -11,6 +11,7 @@
             text-align: center;
             background-color: #f4f4f4;
             color: #333;
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition for dark mode */
         }
         h1 {
             color: #2c3e50;
@@ -19,16 +20,59 @@
             border-radius: 8px;
             display: inline-block;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s; /* Smooth transition for dark mode */
         }
         #total-sales {
             font-size: 1.5em;
             color: #e74c3c;
             font-weight: bold;
+            transition: color 0.3s; /* Smooth transition for dark mode */
+        }
+
+        /* Dark Mode Specific Styles */
+        body.dark-mode {
+            background-color: #1a1a1a; /* Dark background */
+            color: #e0e0e0; /* Light text */
+        }
+        body.dark-mode h1 {
+            background-color: #333; /* Darker header background */
+            color: #f0f0f0; /* Lighter header text */
+            box-shadow: 0 2px 4px rgba(255,255,255,0.1); /* Lighter shadow for dark mode */
+        }
+        body.dark-mode #total-sales {
+            color: #ff9800; /* A contrasting color that works on dark background */
+        }
+
+        /* Dark Mode Toggle Button Styles */
+        #dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            background-color: #2c3e50; /* A color from the existing theme */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            z-index: 1000; /* Ensure the button is on top */
+        }
+        #dark-mode-toggle:hover {
+            background-color: #34495e;
+        }
+        body.dark-mode #dark-mode-toggle {
+            background-color: #555;
+            color: #eee;
+        }
+        body.dark-mode #dark-mode-toggle:hover {
+            background-color: #777;
         }
     </style>
 </head>
 <body>
     <h1>Total Sales: <span id="total-sales">Loading...</span></h1>
+    <button id="dark-mode-toggle">Toggle Dark Mode</button>
 
     <script>
         // Simulate fetching data.csv content directly within the script
@@ -38,6 +82,7 @@ Widget B,87.25
 Widget C,312.10`;
 
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Existing Sales Calculation Functionality ---
             let totalSales = 0;
             const lines = csvContent.split('\n');
 
@@ -60,6 +105,23 @@ Widget C,312.10`;
             if (totalSalesElement) {
                 totalSalesElement.textContent = totalSales.toFixed(2); // Format to two decimal places
             }
+
+            // --- New Dark Mode Toggle Functionality ---
+            const toggleButton = document.getElementById('dark-mode-toggle');
+            const body = document.body;
+
+            // Check for saved dark mode preference in localStorage on page load
+            const savedDarkMode = localStorage.getItem('darkMode');
+            if (savedDarkMode === 'true') {
+                body.classList.add('dark-mode');
+            }
+
+            // Add event listener to the toggle button
+            toggleButton.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                // Save the current state to localStorage
+                localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+            });
         });
     </script>
 </body>
