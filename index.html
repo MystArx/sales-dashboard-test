@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #total-sales {
+            font-size: 1.5em;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Total Sales: <span id="total-sales">Loading...</span></h1>
+
+    <script>
+        // Simulate fetching data.csv content directly within the script
+        const csvContent = `product,sales
+Widget A,152.40
+Widget B,87.25
+Widget C,312.10`;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let totalSales = 0;
+            const lines = csvContent.split('\n');
+
+            // Skip the header row (lines[0])
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line === '') continue; // Skip empty lines
+
+                const columns = line.split(',');
+                // Assuming 'sales' is the second column (index 1)
+                if (columns.length > 1) {
+                    const salesValue = parseFloat(columns[1]);
+                    if (!isNaN(salesValue)) {
+                        totalSales += salesValue;
+                    }
+                }
+            }
+
+            const totalSalesElement = document.getElementById('total-sales');
+            if (totalSalesElement) {
+                totalSalesElement.textContent = totalSales.toFixed(2); // Format to two decimal places
+            }
+        });
+    </script>
+</body>
+</html>
